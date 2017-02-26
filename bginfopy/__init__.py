@@ -20,7 +20,6 @@ class image:
 def main():
     in_img = image(wallpapers.get_wallpaper())
     out_img = image((in_img.directory_path() + "/" + in_img.file_name() + SUFFIX + "." + in_img.file_ext()))
-    print(in_img.full_path, out_img.full_path)
-    #imagemagic.put_text(in_img,out_img)
+    imagemagic.put_text(in_img.full_path,out_img.full_path)
 
 main()

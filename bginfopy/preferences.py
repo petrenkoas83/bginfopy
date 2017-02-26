@@ -1,3 +1,3 @@
 VERBOSE = True
 SUFFIX = '_bginfopy'
-text_gravity = 'North'
+TEXT_GRAVITY = 'North'
