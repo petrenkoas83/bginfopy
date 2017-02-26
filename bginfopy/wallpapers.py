@@ -35,6 +35,8 @@ def get_wallpaper():
                     sys.exit("Unknown desktop session: '{0}'".format(desktop_session))
             else:
                 sys.exit("Desktop session is None")
+        picture = picture.rstrip('\n\r')
+        picture = picture.strip("'")
         if VERBOSE: print("Wallpaper: '{0}'".format(picture))
         return(picture)
 
@@ -52,5 +54,4 @@ def get_wallpaper_lxde():
         cmd="grep -i \"^wallpaper=\" $HOME/.config/pcmanfm/lubuntu/desktop-items-0.conf | cut -d = -f2"
     if VERBOSE: print("Command to get wallpaper: '{0}'".format(cmd))
     picture = os.popen(cmd).read()
-    picture = picture.rstrip('\n')
     return(picture)
