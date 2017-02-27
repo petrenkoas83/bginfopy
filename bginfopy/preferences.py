@@ -1,6 +1,7 @@
 from os.path import expanduser
 import subprocess
 import configparser
+import sys
 
 # Default values
 VERBOSE = True
