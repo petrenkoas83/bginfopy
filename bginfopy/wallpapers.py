@@ -43,7 +43,7 @@ def set_wallpaper(out_img):
     elif desktop_session in ["lubuntu", "lxsession"]:
         result = set_wallpaper_lxde()
     else:
-        sys.exit("Unknown desktop session: '{0}'".format(desktop_session))
+        sys.exit("Unsupported desktop session: '{0}'".format(desktop_session))
     return result
 
 
@@ -57,12 +57,11 @@ def set_wallpaper_lxde():
 
 def determine_platform():
     if VERBOSE: print('Platform: {0}'.format(sys.platform))
-    if sys.platform in ["win32", "cygwin"]:
-        sys.exit("Windows is not supporte")
-    elif sys.platform == "darwin":
-        sys.exit("MacOS in not supported")
-    else:
+    # Since we're writing linux-only for now...
+    if sys.platform.startswith('linux'):
         return sys.platform
+    else:
+        sys.exit("Unsupported platform: '{0}'".format(sys.platform))
 
 
 def determine_desktop_session():
