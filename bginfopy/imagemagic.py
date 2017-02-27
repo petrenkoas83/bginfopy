@@ -1,7 +1,7 @@
 import subprocess
 from preferences import *
 
-#http://www.imagemagick.org/Usage/text/
+#http://www.imagemagick.org/Usage/text/\
 def put_text(in_img, out_img):
     if VERBOSE: print("Input image: '{0}'; Output image: '{1}'.".format(in_img, out_img))
     #http://stackoverflow.com/questions/25079140/python-subprocess-popen-check-for-success-and-errors

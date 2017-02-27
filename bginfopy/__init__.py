@@ -30,8 +30,13 @@ def main():
     else:
         print('File {0} does not exist!'.format(in_img.full_path))
         return 1
-    imagemagic.put_text(in_img.full_path, out_img.full_path)
-
+    if imagemagic.put_text(in_img.full_path, out_img.full_path) == 0:
+        if wallpapers.set_wallpaper(out_img.full_path) == 0:
+            config['MAIN']['ORIGINAL_WALLPAPER'] = out_img
+            with open('USER_CONF_DIR + "/" + USER_CONF_FILE', 'w') as configfile:  # save
+                config.write(configfile)
+    else:
+        print('Error occurred during put_text')
     return 0
 
 main()

@@ -15,8 +15,7 @@ TEXT_GRAVITY = 'North'
 try:
     output = subprocess.check_output(["mkdir", "--verbose", "--parents", USER_CONF_DIR], stderr=subprocess.STDOUT)
 except subprocess.CalledProcessError as error:
-    print("Error: '{0}': '{1}': '{2}'".format(error.returncode, error.output, error.message))
-    exit()
+    sys.exit("Error: '{0}': '{1}': '{2}'".format(error.returncode, error.output, error.message))
 else:
     if VERBOSE: print("Directory {0} successfully created or already exist: {1}: {2}".format(USER_CONF_DIR, output, subprocess.STDOUT))
 
