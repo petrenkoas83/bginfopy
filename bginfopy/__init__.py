@@ -32,9 +32,12 @@ def main():
         return 1
     if imagemagic.put_text(in_img.full_path, out_img.full_path) == 0:
         if wallpapers.set_wallpaper(out_img.full_path) == 0:
-            config['MAIN']['ORIGINAL_WALLPAPER'] = out_img
-            with open('USER_CONF_DIR + "/" + USER_CONF_FILE', 'w') as configfile:  # save
-                config.write(configfile)
+            if VERBOSE: print("Previous value of [MAIN][ORIGINAL_WALLPAPER]: '{0}'".format(config['MAIN']['ORIGINAL_WALLPAPER']))
+            config.set('MAIN', 'ORIGINAL_WALLPAPER', in_img.full_path)
+            if VERBOSE: print("Renew parametr in config [MAIN][ORIGINAL_WALLPAPER] = '{0}'".format(in_img.full_path))
+            with open(USER_CONF_DIR + "/" + USER_CONF_FILE, 'w') as config_file:  # save
+                config.write(config_file)
+                config_file.close()
     else:
         print('Error occurred during put_text')
     return 0

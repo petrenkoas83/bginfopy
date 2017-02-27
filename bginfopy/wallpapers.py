@@ -49,6 +49,7 @@ def set_wallpaper(out_img):
 
 def set_wallpaper_mate():
     print('set_wallpaper_mate')
+    return 0
 
 
 def set_wallpaper_lxde():

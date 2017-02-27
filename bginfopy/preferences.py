@@ -22,17 +22,22 @@ else:
 
 # Try to read user config
 config = configparser.ConfigParser()
+
 if VERBOSE: print("User config file: {0}".format(USER_CONF_DIR + "/" + USER_CONF_FILE))
 config.read(USER_CONF_DIR + "/" + USER_CONF_FILE)
 if VERBOSE: print("User config contains sections: {0}".format(config.sections()))
-if 'MAIN' in config.sections():
-    if config['MAIN']['SUFFIX'] is not None:
-        SUFFIX = config['MAIN']['SUFFIX']
-        if VERBOSE: print("SUFFIX has been redefined to '{0}'".format(SUFFIX))
-    if config['MAIN']['ORIGINAL_WALLPAPER'] is not None:
-        ORIGINAL_WALLPAPER = config['MAIN']['ORIGINAL_WALLPAPER']
-        if VERBOSE: print("ORIGINAL_WALLPAPER is '{0}'".format(ORIGINAL_WALLPAPER))
-if 'TEXT' in config.sections():
-    if config['TEXT']['GRAVITY'] is not None:
-        TEXT_GRAVITY = config['TEXT']['GRAVITY']
-        if VERBOSE: print("TEXT_GRAVITY has been redefined to '{0}'".format(TEXT_GRAVITY))
+### SECTION MAIN ###
+if 'MAIN' not in config: config.add_section('MAIN')
+config_main = config["MAIN"]
+
+if 'SUFFIX' in config_main: SUFFIX = config['MAIN']['SUFFIX']
+else: config.set('MAIN','SUFFIX',SUFFIX)
+
+if 'ORIGINAL_WALLPAPER' is config_main: ORIGINAL_WALLPAPER = config['MAIN']['ORIGINAL_WALLPAPER']
+else: config.set('MAIN','ORIGINAL_WALLPAPER',ORIGINAL_WALLPAPER)
+
+### SECTION TEXT ###
+if 'TEXT' not in config.sections(): config.add_section('TEXT')
+config_text = config["TEXT"]
+if 'GRAVITY' in config_text: TEXT_GRAVITY = config['TEXT']['GRAVITY']
+else: config.set('TEXT','GRAVITY', TEXT_GRAVITY)
