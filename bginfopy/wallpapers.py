@@ -54,6 +54,7 @@ def set_wallpaper_mate():
 
 def set_wallpaper_lxde():
     print('set_wallpaper_lxde')
+    return 0
 
 
 def determine_platform():
