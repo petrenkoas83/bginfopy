@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import wallpapers
-import imagemagic
 import os.path
-import re
+
+import imagemagic
+import wallpapers
 from preferences import *
 
 
@@ -14,12 +14,13 @@ class Image:
     @property
     def directory_path(self):
         # type: () -> str
-        return "/".join(self.full_path.split('/')[0:-1])
+        return os.path.split(self.full_path)[0]
 
     @property
     def file_full_name(self):
         # type: () -> str
-        return self.full_path.split('/')[-1]
+        # File name with extension
+        return os.path.split(self.full_path)[-1]
 
     @property
     def file_name(self):
@@ -29,12 +30,9 @@ class Image:
     @property
     def file_ext(self):
         # type: () -> str
-        rPattern = '^.*/.*\.([^/\s]+)$'
-        if re.search(rPattern, self.file_full_name) is not None:
-            return re.sub(rPattern, r'\1', self.file_full_name)
-        else:
-            return ''  # Empty string = no extension
-
+        # http://stackoverflow.com/a/37273834/3711461
+        # Returns empty string for names like "/something/.DS_Store" but we don't care
+        return os.path.splitext(self.full_path)[-1]
 
     @property
     def file_exist(self):
