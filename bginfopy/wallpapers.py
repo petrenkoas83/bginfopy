@@ -81,36 +81,14 @@ def determine_desktop_session():
         sys.exit("Desktop session is None")
 
 def detemine_screen_resolution():
-    output = ''
     screen_resolution = "640x480"
-    try:
-        # TODO: https://docs.python.org/2/library/subprocess.html#replacing-shell-pipeline
-
-        #output=`dmesg | grep hda`
-        #p1 = Popen(["dmesg"], stdout=PIPE)
-        #p2 = Popen(["grep", "hda"], stdin=p1.stdout, stdout=PIPE)
-        #p1.stdout.close()  # Allow p1 to receive a SIGPIPE if p2 exits.
-        #output = p2.communicate()[0]
-
-        #p1 = subprocess.Popen(['/usr/bin/xrandr','--display',':0'], stdout=subprocess.PIPE)
-        #p2 = subprocess.Popen(['/bin/grep','-oP','"current\s\d+\sx\s\d+"'], stdin=p1.stdout, stdout=subprocess.PIPE)
-        #p1.stdout.close()  # Allow p1 to receive a SIGPIPE if p2 exits.
-        #output = p2.communicate()[0]
-
-        #screen_resolution = subprocess.check_output(['/usr/bin/xrandr','--display',':0',
-        #                                             '|','/bin/grep','-oP','"current\s\d+\sx\s\d+"'],
-        #                                            stderr=subprocess.STDOUT)
-
-        output = os.popen('xrandr --display :0 | grep -oP "current\s\d+\sx\s\d+"').read()
-        output = output.rstrip('\n')
-    except subprocess.CalledProcessError as error:
-        print("Error: '{0}': '{1}': '{2}'".format(error.returncode, error.output, error.message))
-    else:
-        if VERBOSE: print("xrandr output current: '{0}'".format(output))
-        if output <> '':
-            output = output.split()
-            output.pop(0)
-            output= "".join(output)
-            screen_resolution = output
-        if VERBOSE: print("Screen resolution: '{0}'".format(screen_resolution))
+    output = os.popen('xrandr --display :0 | grep -oP "current\s\d+\sx\s\d+"').read()
+    output = output.rstrip('\n')
+    if VERBOSE: print("xrandr output current: '{0}'".format(output))
+    if output <> '':
+        output = output.split()
+        output.pop(0)
+        output= "".join(output)
+        screen_resolution = output
+    if VERBOSE: print("Screen resolution: '{0}'".format(screen_resolution))
     return screen_resolution
