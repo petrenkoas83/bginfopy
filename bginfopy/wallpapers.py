@@ -1,4 +1,5 @@
 import sys
+import subprocess
 import os
 from preferences import *
 
@@ -78,3 +79,19 @@ def determine_desktop_session():
         return desktop_session
     else:
         sys.exit("Desktop session is None")
+
+def detemine_screen_resolution():
+    try:
+        # TODO: https://docs.python.org/2/library/subprocess.html#replacing-shell-pipeline
+        screen_resolution = subprocess.check_output(['/usr/bin/xrandr','--display',':0',
+                                                     '|','/bin/grep','-oP','"current\s\d+\sx\s\d+"'],
+                                                    stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as error:
+        print("Error: '{0}': '{1}': '{2}'".format(error.returncode, error.output, error.message))
+        screen_resolution = "640x480"
+    else:
+        if VERBOSE: print("xrandr output current: {0}".format(screen_resolution))
+        screen_resolution = screen_resolution.split()
+        screen_resolution = screen_resolution.pop(0)
+        screen_resolution = "".join(screen_resolution)
+    return screen_resolution
