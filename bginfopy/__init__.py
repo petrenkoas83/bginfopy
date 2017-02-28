@@ -3,6 +3,7 @@
 import wallpapers
 import imagemagic
 import os.path
+import re
 from preferences import *
 
 
@@ -27,9 +28,13 @@ class Image:
 
     @property
     def file_ext(self):
-        # TODO: переделать в regex
         # type: () -> str
-        return self.file_full_name.split('.')[-1]
+        rPattern = '^.*/.*\.([^/\s]+)$'
+        if re.search(rPattern, self.file_full_name) is not None:
+            return re.sub(rPattern, r'\1', self.file_full_name)
+        else:
+            return ''  # Empty string = no extension
+
 
     @property
     def file_exist(self):
