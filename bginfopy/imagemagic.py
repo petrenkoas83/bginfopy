@@ -2,11 +2,11 @@ import subprocess
 import wallpapers
 from preferences import *
 
-#http://www.imagemagick.org/Usage/text/\
+
+# http://www.imagemagick.org/Usage/text/\
 def put_text(in_img, out_img):
-    if VERBOSE: print("Input image: '{0}'; Output image: '{1}'.".format(in_img, out_img))
-
-
+    if VERBOSE:
+        print("Input image: '{0}'; Output image: '{1}'.".format(in_img, out_img))
     # http://stackoverflow.com/questions/25079140/python-subprocess-popen-check-for-success-and-errors
     # https://docs.python.org/2/library/subprocess.html#subprocess.check_call
     try:
@@ -17,7 +17,7 @@ def put_text(in_img, out_img):
             #       -size 165x70 -gravity center label:Anthony     label_color.gif
             output = subprocess.check_output(["convert",
                                               "-background", BACKGROUND_COLOR,
-                                              "-fill","dodgerblue",
+                                              "-fill", "dodgerblue",
                                               "-font", "Candice",
                                               "-strokewidth", "2",
                                               "-stroke","blue",
@@ -38,9 +38,10 @@ def put_text(in_img, out_img):
                                               "'Test text'",
                                               out_img],
                                              stderr=subprocess.STDOUT)
+
     except subprocess.CalledProcessError as error:
-        #self.isCommandExecutionSuccessful = False
+        # self.isCommandExecutionSuccessful = False
         print("Error: '{0}': '{1}': '{2}'".format(error.returncode, error.output, error.message))
         return error.returncode
-    return 0
 
+    return 0
