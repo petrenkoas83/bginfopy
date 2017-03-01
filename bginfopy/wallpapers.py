@@ -1,6 +1,5 @@
-import sys
-import subprocess
 import os
+
 from preferences import *
 
 
@@ -36,7 +35,8 @@ def get_wallpaper_lxde():
     if VERBOSE: print("Profile name: '{0}'".format(profile_name))
     if (profile_name is not None) and (profile_name <> ''):
         # return os.popen("grep -i \"^wallpaper=\" $HOME/.config/pcmanfm/{0}/pcmanfm.conf | cut -d = -f2".format(profile_name)).read()
-        cmd = "grep -i \"^wallpaper=\" $HOME/.config/pcmanfm/{0}/desktop-items-0.conf | cut -d = -f2".format(profile_name)
+        cmd = "grep -i \"^wallpaper=\" $HOME/.config/pcmanfm/{0}/desktop-items-0.conf | cut -d = -f2".format(
+            profile_name)
     else:
         # return os.popen("grep -i \"^wallpaper=\" $HOME/.config/pcmanfm/LXDE/pcmanfm.conf | cut -d = -f2").read()
         cmd = "grep -i \"^wallpaper=\" $HOME/.config/pcmanfm/lubuntu/desktop-items-0.conf | cut -d = -f2"
@@ -96,7 +96,8 @@ def determine_desktop_session():
     else:
         sys.exit("Desktop session is None")
 
-def detemine_screen_resolution():
+
+def determine_screen_resolution():
     screen_resolution = "640x480"
     output = os.popen('xrandr --display :0 | grep -oP "current\s\d+\sx\s\d+"').read()
     output = output.rstrip('\n')
@@ -104,7 +105,42 @@ def detemine_screen_resolution():
     if output <> '':
         output = output.split()
         output.pop(0)
-        output= "".join(output)
+        output = "".join(output)
         screen_resolution = output
     if VERBOSE: print("Screen resolution: '{0}'".format(screen_resolution))
     return screen_resolution
+
+
+def get_wallpaper_mode():
+    # Get desktop session name to determine where config is located
+    desktop_session = determine_desktop_session()
+
+    if desktop_session in ["mate", "mate-session"]:
+        sys.exit("Mate session is not supported yet!")
+        # TODO: Implement Mate support
+        # Suggestion: do not implement Mate yet :)
+        # configpath = ???
+    elif desktop_session in ["lubuntu", "lxsession"]:
+        # I will never dupe code again
+        # I will never dupe code again
+        # I will never dupe code again ...
+        # That's just temporary (I hope so...)
+        profile_name = os.popen(
+            "grep -i \"^@pcmanfm\" /etc/xdg/lxsession/Lubuntu/autostart | grep -oP \"\\-\\-profile[\\s=].*[\\s\\n\\r]*\""
+        ).read()
+
+        if (profile_name is not None) and (profile_name <> ''):
+            config_path = os.path.expandvars('$HOME') + '/.config/pcmanfm/{0}/desktop-items-0.conf'
+        else:
+            config_path = os.path.expandvars('$HOME') + '/.config/pcmanfm/{0}/desktop-items-0.conf'
+    else:
+        sys.exit("Unknown desktop session: '{0}'".format(desktop_session))
+
+    # Init parser
+    parser = configparser.ConfigParser()
+
+    # TODO: ДОПИСАТЬ!!!!!!!
+    # Parse config for:
+    # [*]
+    # wallpaper_mode = color
+    # if color => False | smth else => True

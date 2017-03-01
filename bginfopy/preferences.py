@@ -1,7 +1,8 @@
-from os.path import expanduser
 import subprocess
-import configparser
 import sys
+from os.path import expanduser
+
+import configparser
 
 
 def str2bool(string):
@@ -14,10 +15,13 @@ APP_NAME = 'bginfopy'
 VERBOSE = True
 USER_CONF_DIR = expanduser("~") + '/.' + APP_NAME
 USER_CONF_FILE = APP_NAME + '.ini'
+
+# Ini values
 SUFFIX = '_' + APP_NAME
 USE_WALLPAPER_IMAGE = True
 ORIGINAL_WALLPAPER_IMAGE = ''
 BACKGROUND_COLOR = 'white'
+TEXT = 'Test text'
 TEXT_GRAVITY = 'North'
 
 # User configuration

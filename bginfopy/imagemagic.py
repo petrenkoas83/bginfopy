@@ -1,4 +1,3 @@
-import subprocess
 import wallpapers
 from preferences import *
 
@@ -18,13 +17,14 @@ def put_text(in_img, out_img):
             output = subprocess.check_output(["convert",
                                               "-background", BACKGROUND_COLOR,
                                               "-fill", "dodgerblue",
+                                              # TODO: Try to get system default UI font and use it
                                               "-font", "Candice",
                                               "-strokewidth", "2",
-                                              "-stroke","blue",
-                                              "-undercolor","lightblue",
-                                              "-size",wallpapers.detemine_screen_resolution(),
+                                              "-stroke", "blue",
+                                              "-undercolor", "lightblue",
+                                              "-size", wallpapers.determine_screen_resolution(),
                                               "-gravity", TEXT_GRAVITY,
-                                              "label:'Test text'",
+                                              "label:" + TEXT,
                                               out_img],
                                              stderr=subprocess.STDOUT)
         else:
@@ -32,10 +32,10 @@ def put_text(in_img, out_img):
             # os.popen("convert {0} -gravity {2} -pointsize 30 -annotate +0+100 'TestText' {1}".format(in_img, out_img, TEXT_GRAVITY))
             output = subprocess.check_output(["convert",
                                               in_img,
-                                              "-gravity",TEXT_GRAVITY,
+                                              "-gravity", TEXT_GRAVITY,
                                               "-pointsize","30",
                                               "-annotate","+0+100",
-                                              "'Test text'",
+                                              TEXT,
                                               out_img],
                                              stderr=subprocess.STDOUT)
 

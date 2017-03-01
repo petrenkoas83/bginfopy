@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import wallpapers
-import imagemagic
-import os.path
+import os
 
+import imagemagic
+import wallpapers
 from preferences import *
 
 
@@ -45,7 +45,9 @@ def main():
 
     # Create Image objects
     in_img = Image(wallpapers.get_wallpaper())
-    out_img = Image(USER_CONF_DIR + "/" + in_img.file_name + SUFFIX + in_img.file_ext)
+    # out_img = Image(USER_CONF_DIR + "/" + in_img.file_name + SUFFIX + in_img.file_ext)
+    # Let's do it the right (and cross-platform) way: joining path instead of concatenation of strings
+    out_img = Image(os.path.join(USER_CONF_DIR, in_img.file_name + SUFFIX + in_img.file_ext))
     if VERBOSE:
         print("in_img.file_name: '{0}'".format(in_img.file_name))
     if VERBOSE:
@@ -74,7 +76,7 @@ def main():
     # Process wallpaper image
     if VERBOSE: print("Try to process wallpaper image.")
     if imagemagic.put_text(in_img.full_path, out_img.full_path) == 0:
-        # In convert successful, then set new wallpaper
+        # If convert successful, then set new wallpaper
         if wallpapers.set_wallpaper(out_img.full_path) == 0:
             # If set new wallpaper is successful, then renew path to original wallpaper image
             if VERBOSE: print("Previous value of [MAIN][ORIGINAL_WALLPAPER_IMAGE]: '{0}'".format(
