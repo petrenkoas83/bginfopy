@@ -45,7 +45,11 @@ def main():
 
     # Create Image objects
     in_img = Image(wallpapers.get_wallpaper())
-    out_img = Image(USER_CONF_DIR + "/" + in_img.file_name + SUFFIX + "." + in_img.file_ext)
+    out_img = Image(USER_CONF_DIR + "/" + in_img.file_name + SUFFIX + in_img.file_ext)
+    if VERBOSE:
+        print("in_img.file_name: '{0}'".format(in_img.file_name))
+    if VERBOSE:
+        print("in_img.file_ext: '{0}'".format(in_img.file_ext))
 
     # Check current wallpaper
     if in_img.file_name.endswith(SUFFIX):
