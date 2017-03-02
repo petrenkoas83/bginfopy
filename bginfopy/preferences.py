@@ -4,6 +4,8 @@ from os.path import expanduser
 
 import configparser
 
+from wallpapers import get_wallpaper_mode
+
 
 def str2bool(string):
     # type: (str) -> bool
@@ -18,9 +20,12 @@ USER_CONF_FILE = APP_NAME + '.ini'
 
 # Ini values
 SUFFIX = '_' + APP_NAME
-USE_WALLPAPER_IMAGE = True
+# TODO: Set as always true, but take input in init.
+USE_WALLPAPER_IMAGE = get_wallpaper_mode()  # True
 ORIGINAL_WALLPAPER_IMAGE = ''
-BACKGROUND_COLOR = 'white'
+# TODO: probably should get current bg color.
+BACKGROUND_COLOR = 'teal'
+# TODO: move TEXT to config file.
 TEXT = 'Test text'
 TEXT_GRAVITY = 'North'
 

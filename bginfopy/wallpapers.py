@@ -27,24 +27,25 @@ def get_wallpaper_mate():
     return os.popen("gsettings get org.mate.background picture-filename").read()
 
 
-def get_wallpaper_lxde():
-    profile_name = os.popen(
+def get_lxde_profile_name():
+    return os.popen(
         "grep -i \"^@pcmanfm\" /etc/xdg/lxsession/Lubuntu/autostart | grep -oP \"\\-\\-profile[\\s=].*[\\s\\n\\r]*\""
     ).read()
 
+
+def get_wallpaper_lxde():
+    profile_name = get_lxde_profile_name()
+    parser = configparser.ConfigParser()
+
     if VERBOSE: print("Profile name: '{0}'".format(profile_name))
+
     if (profile_name is not None) and (profile_name <> ''):
-        # return os.popen("grep -i \"^wallpaper=\" $HOME/.config/pcmanfm/{0}/pcmanfm.conf | cut -d = -f2".format(profile_name)).read()
-        cmd = "grep -i \"^wallpaper=\" $HOME/.config/pcmanfm/{0}/desktop-items-0.conf | cut -d = -f2".format(
-            profile_name)
+        config_path = os.path.join(os.path.expandvars('$HOME'), '.config/pcmanfm', profile_name, 'desktop-items-0.conf')
     else:
-        # return os.popen("grep -i \"^wallpaper=\" $HOME/.config/pcmanfm/LXDE/pcmanfm.conf | cut -d = -f2").read()
-        cmd = "grep -i \"^wallpaper=\" $HOME/.config/pcmanfm/lubuntu/desktop-items-0.conf | cut -d = -f2"
+        config_path = os.path.join(os.path.expandvars('$HOME'), '.config/pcmanfm/lubuntu/desktop-items-0.conf')
 
-    if VERBOSE: print("Command to get wallpaper: '{0}'".format(cmd))
-    picture = os.popen(cmd).read()
-
-    return picture
+    parser.read(config_path)
+    return parser['*']['wallpaper']
 
 
 def set_wallpaper(out_img):
@@ -112,35 +113,34 @@ def determine_screen_resolution():
 
 
 def get_wallpaper_mode():
-    # Get desktop session name to determine where config is located
     desktop_session = determine_desktop_session()
 
     if desktop_session in ["mate", "mate-session"]:
-        sys.exit("Mate session is not supported yet!")
-        # TODO: Implement Mate support
-        # Suggestion: do not implement Mate yet :)
-        # configpath = ???
+        if os.popen("gsettings get org.mate.background picture-filename").read() <> '':
+            return True
+        else:
+            return False
+
     elif desktop_session in ["lubuntu", "lxsession"]:
-        # I will never dupe code again
-        # I will never dupe code again
-        # I will never dupe code again ...
-        # That's just temporary (I hope so...)
-        profile_name = os.popen(
-            "grep -i \"^@pcmanfm\" /etc/xdg/lxsession/Lubuntu/autostart | grep -oP \"\\-\\-profile[\\s=].*[\\s\\n\\r]*\""
-        ).read()
+        profile_name = get_lxde_profile_name()
 
         if (profile_name is not None) and (profile_name <> ''):
-            config_path = os.path.expandvars('$HOME') + '/.config/pcmanfm/{0}/desktop-items-0.conf'
+            config_path = os.path.expandvars('$HOME') + '/.config/pcmanfm/{0}/desktop-items-0.conf'.format(profile_name)
         else:
-            config_path = os.path.expandvars('$HOME') + '/.config/pcmanfm/{0}/desktop-items-0.conf'
+            config_path = os.path.expandvars('$HOME') + '/.config/pcmanfm/lubuntu/desktop-items-0.conf'
+        # endif
+
+        # Parse config for:
+        # [*]
+        # wallpaper_mode = color
+        # if 'color' => False | smth else => True
+        parser = configparser.ConfigParser()
+        parser.read(config_path)
+
+        if parser['*']['wallpaper_mode'] <> 'color':
+            return True
+        else:
+            return False
+
     else:
         sys.exit("Unknown desktop session: '{0}'".format(desktop_session))
-
-    # Init parser
-    parser = configparser.ConfigParser()
-
-    # TODO: ДОПИСАТЬ!!!!!!!
-    # Parse config for:
-    # [*]
-    # wallpaper_mode = color
-    # if color => False | smth else => True
