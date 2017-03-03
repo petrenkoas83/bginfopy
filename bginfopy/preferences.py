@@ -4,12 +4,18 @@ from os.path import expanduser
 
 import configparser
 
-from wallpapers import get_wallpaper_mode
-
 
 def str2bool(string):
     # type: (str) -> bool
     return string.lower() in ("yes", "true", "y", "1")
+
+
+# http://stackoverflow.com/questions/5980042/how-to-implement-the-verbose-or-v-option-into-a-script
+def verboseprint(message):
+    if VERBOSE:
+        print message
+    else:
+        pass
 
 
 # Default values
@@ -20,13 +26,11 @@ USER_CONF_FILE = APP_NAME + '.ini'
 
 # Ini values
 SUFFIX = '_' + APP_NAME
-# TODO: Set as always true, but take input in init.
-USE_WALLPAPER_IMAGE = get_wallpaper_mode()  # True
+USE_WALLPAPER_IMAGE = True
 ORIGINAL_WALLPAPER_IMAGE = ''
-# TODO: probably should get current bg color.
-BACKGROUND_COLOR = 'teal'
-# TODO: move TEXT to config file.
-TEXT = 'Test text'
+BACKGROUND_COLOR = 'teal'  # white is too much
+# TODO: move TEXT to config file so imagemagic read it from config
+TEXT_LABEL = 'Test text'
 TEXT_GRAVITY = 'North'
 
 # User configuration
@@ -36,15 +40,15 @@ try:
 except subprocess.CalledProcessError as error:
     sys.exit("Error: '{0}': '{1}': '{2}'".format(error.returncode, error.output, error.message))
 else:
-    if VERBOSE: print(
+    verboseprint(
         "Directory {0} successfully created or already exist: {1}: {2}".format(USER_CONF_DIR, output,
                                                                                subprocess.STDOUT))
 
 # Try to read user config
 config = configparser.ConfigParser()
-if VERBOSE: print("User config file: {0}".format(USER_CONF_DIR + "/" + USER_CONF_FILE))
+verboseprint("User config file: {0}".format(USER_CONF_DIR + "/" + USER_CONF_FILE))
 config.read(USER_CONF_DIR + "/" + USER_CONF_FILE)
-if VERBOSE: print("User config contains sections: {0}".format(config.sections()))
+verboseprint("User config contains sections: {0}".format(config.sections()))
 
 ### SECTION MAIN ###
 if 'MAIN' not in config: config.add_section('MAIN')
@@ -82,3 +86,8 @@ if 'GRAVITY' in config_text:
     TEXT_GRAVITY = config['TEXT']['GRAVITY']
 else:
     config.set('TEXT', 'GRAVITY', TEXT_GRAVITY)
+
+if 'TEXT_LABEL' in config_text:
+    TEXT_LABEL = config_text['TEXT_LABEL']
+else:
+    config.set('TEXT', 'TEXT_LABEL', TEXT_LABEL)

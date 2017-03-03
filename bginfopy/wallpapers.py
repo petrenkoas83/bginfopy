@@ -19,7 +19,7 @@ def get_wallpaper():
     picture = picture.rstrip('\n\r')
     picture = picture.strip("'")
 
-    if VERBOSE: print("Wallpaper: '{0}'".format(picture))
+    verboseprint("Wallpaper: '{0}'".format(picture))
     return picture
 
 
@@ -37,7 +37,7 @@ def get_wallpaper_lxde():
     profile_name = get_lxde_profile_name()
     parser = configparser.ConfigParser()
 
-    if VERBOSE: print("Profile name: '{0}'".format(profile_name))
+    verboseprint("Profile name: '{0}'".format(profile_name))
 
     if (profile_name is not None) and (profile_name <> ''):
         config_path = os.path.join(os.path.expandvars('$HOME'), '.config/pcmanfm', profile_name, 'desktop-items-0.conf')
@@ -74,7 +74,7 @@ def set_wallpaper_lxde():
 
 
 def determine_platform():
-    if VERBOSE: print('Platform: {0}'.format(sys.platform))
+    verboseprint('Platform: {0}'.format(sys.platform))
     # Since we're writing linux-only for now...
     if sys.platform.startswith('linux'):
         return sys.platform
@@ -92,7 +92,7 @@ def determine_desktop_session():
         desktop_session = desktop_session.rstrip('\n')
 
     if desktop_session is not None:
-        if VERBOSE: print('Desktop session: {0}'.format(desktop_session))
+        verboseprint('Desktop session: {0}'.format(desktop_session))
         return desktop_session
     else:
         sys.exit("Desktop session is None")
@@ -102,17 +102,18 @@ def determine_screen_resolution():
     screen_resolution = "640x480"
     output = os.popen('xrandr --display :0 | grep -oP "current\s\d+\sx\s\d+"').read()
     output = output.rstrip('\n')
-    if VERBOSE: print("xrandr output current: '{0}'".format(output))
+    verboseprint("xrandr output current: '{0}'".format(output))
     if output <> '':
         output = output.split()
         output.pop(0)
         output = "".join(output)
         screen_resolution = output
-    if VERBOSE: print("Screen resolution: '{0}'".format(screen_resolution))
+    verboseprint("Screen resolution: '{0}'".format(screen_resolution))
     return screen_resolution
 
 
-def get_wallpaper_mode():
+def wallpaper_is_set():
+    # type: () -> bool
     desktop_session = determine_desktop_session()
 
     if desktop_session in ["mate", "mate-session"]:
