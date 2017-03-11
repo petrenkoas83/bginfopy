@@ -78,12 +78,9 @@ def main():
         # If convert successful, then set new wallpaper
         if wallpapers.set_wallpaper(out_img.full_path) == 0:
             # If set new wallpaper is successful, then renew path to original wallpaper image
-            verboseprint("Previous value of [MAIN][MAIN_original_wallpaper_image]: '{0}'".format(
-                config['MAIN']['original_wallpaper_image']))
             config.set('MAIN', 'original_wallpaper_image', in_img.full_path)
             # Try to write user config
-            verboseprint(
-                "Renew parameter in config [MAIN][original_wallpaper_image] = '{0}'".format(in_img.full_path))
+            verboseprint("Renew parameter in config for [MAIN][original_wallpaper_image] = '{0}'".format(in_img.full_path))
             with open(USER_CONF_DIR + "/" + USER_CONF_FILE, 'w') as config_file:  # save
                 config.write(config_file)
                 config_file.close()
