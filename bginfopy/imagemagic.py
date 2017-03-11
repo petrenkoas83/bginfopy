@@ -8,13 +8,10 @@ def put_text(in_img, out_img):
     # http://stackoverflow.com/questions/25079140/python-subprocess-popen-check-for-success-and-errors
     # https://docs.python.org/2/library/subprocess.html#subprocess.check_call
     try:
-        if (out_img == '') or not USE_WALLPAPER_IMAGE:
-            verboseprint("(out_img == '') or not USE_WALLPAPER_IMAGE")
-            # convert -background white -fill dodgerblue  -font Candice \
-            #       -strokewidth 2  -stroke blue   -undercolor lightblue \
-            #       -size 165x70 -gravity center label:Anthony     label_color.gif
+        if (out_img == '') or not MAIN_use_wallpaper_image:
+            verboseprint("(out_img == '') or not MAIN_use_wallpaper_image")
             output = subprocess.check_output(["convert",
-                                              "-background", BACKGROUND_COLOR,
+                                              "-background", BACKGROUND_color,
                                               "-fill", "dodgerblue",
                                               # TODO: Try to get system default UI font and use it
                                               "-font", "Candice",
@@ -22,19 +19,19 @@ def put_text(in_img, out_img):
                                               "-stroke", "blue",
                                               "-undercolor", "lightblue",
                                               "-size", wallpapers.determine_screen_resolution(),
-                                              "-gravity", TEXT_GRAVITY,
-                                              "label:" + TEXT_LABEL,
+                                              "-gravity", TEXT_gravity,
+                                              TEXT_title,
                                               out_img],
                                              stderr=subprocess.STDOUT)
         else:
-            verboseprint("USE_WALLPAPER_IMAGE")
-            # os.popen("convert {0} -gravity {2} -pointsize 30 -annotate +0+100 'TestText' {1}".format(in_img, out_img, TEXT_GRAVITY))
+            verboseprint("MAIN_use_wallpaper_image")
+            # os.popen("convert {0} -gravity {2} -pointsize 30 -annotate +0+100 'TestText' {1}".format(in_img, out_img, TEXT_gravity))
             output = subprocess.check_output(["convert",
                                               in_img,
-                                              "-gravity", TEXT_GRAVITY,
+                                              "-gravity", TEXT_gravity,
                                               "-pointsize","30",
                                               "-annotate","+0+100",
-                                              TEXT_LABEL,
+                                              TEXT_title,
                                               out_img],
                                              stderr=subprocess.STDOUT)
 

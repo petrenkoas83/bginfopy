@@ -20,18 +20,10 @@ def verboseprint(message):
 
 # Default values
 APP_NAME = 'bginfopy'
+# TODO: https://docs.python.org/2/library/logging.html
 VERBOSE = True
 USER_CONF_DIR = expanduser("~") + '/.' + APP_NAME
 USER_CONF_FILE = APP_NAME + '.ini'
-
-# Ini values
-SUFFIX = '_' + APP_NAME
-USE_WALLPAPER_IMAGE = True
-ORIGINAL_WALLPAPER_IMAGE = ''
-BACKGROUND_COLOR = 'teal'  # white is too much
-# TODO: move TEXT to config file so imagemagic read it from config
-TEXT_LABEL = 'Test text'
-TEXT_GRAVITY = 'North'
 
 # User configuration
 # Try to create user conf dir
@@ -54,40 +46,74 @@ verboseprint("User config contains sections: {0}".format(config.sections()))
 if 'MAIN' not in config: config.add_section('MAIN')
 config_main = config["MAIN"]
 
-if 'SUFFIX' in config_main:
-    SUFFIX = config['MAIN']['SUFFIX']
+if 'suffix' in config_main:
+    MAIN_suffix = config_main['suffix']
 else:
-    config.set('MAIN', 'SUFFIX', SUFFIX)
+    MAIN_suffix = '_' + APP_NAME
+    config_main.set('suffix', MAIN_suffix)
 
-if 'USE_WALLPAPER_IMAGE' in config_main:
-    USE_WALLPAPER_IMAGE = str2bool(config['MAIN']['USE_WALLPAPER_IMAGE'])
+if 'use_wallpaper_image' in config_main:
+    MAIN_use_wallpaper_image = str2bool(config_main['use_wallpaper_image'])
 else:
-    config.set('MAIN', 'USE_WALLPAPER_IMAGE', str(USE_WALLPAPER_IMAGE))
+    MAIN_use_wallpaper_image = True
+    config_main.set('use_wallpaper_image', str(MAIN_use_wallpaper_image))
 
-if 'ORIGINAL_WALLPAPER_IMAGE' in config_main:
-    ORIGINAL_WALLPAPER_IMAGE = config['MAIN']['ORIGINAL_WALLPAPER_IMAGE']
+if 'original_wallpaper_image' in config_main:
+    MAIN_original_wallpaper_image = config_main['original_wallpaper_image']
 else:
-    config.set('MAIN', 'ORIGINAL_WALLPAPER_IMAGE', ORIGINAL_WALLPAPER_IMAGE)
+    MAIN_original_wallpaper_image = ''
+    config_main.set('original_wallpaper_image', MAIN_original_wallpaper_image)
 
 ### SECTION BACKGROUND ###
 if 'BACKGROUND' not in config: config.add_section('BACKGROUND')
 config_background = config["BACKGROUND"]
 
-if 'COLOR' in config_background:
-    BACKGROUND_COLOR = config_background['COLOR']
+if 'color' in config_background:
+    BACKGROUND_color = config_background['color']
 else:
-    config.set('BACKGROUND', 'COLOR', BACKGROUND_COLOR)
+    BACKGROUND_color = 'teal'  # white is too much
+    config_background.set('color', BACKGROUND_color)
 
 ### SECTION TEXT ###
 if 'TEXT' not in config.sections(): config.add_section('TEXT')
 config_text = config["TEXT"]
 
-if 'GRAVITY' in config_text:
-    TEXT_GRAVITY = config['TEXT']['GRAVITY']
+if 'gravity' in config_text:
+    TEXT_gravity = config_text['gravity']
 else:
-    config.set('TEXT', 'GRAVITY', TEXT_GRAVITY)
+    TEXT_gravity = 'North'
+    config_text.set('gravity', TEXT_gravity)
 
-if 'TEXT_LABEL' in config_text:
-    TEXT_LABEL = config_text['TEXT_LABEL']
+if 'TITLE' in config_text:
+    TEXT_title = config_text['title']
 else:
-    config.set('TEXT', 'TEXT_LABEL', TEXT_LABEL)
+    TEXT_title = 'Test text'
+    config_text.set('title', TEXT_title)
+
+### SECTION SHOW_INFO ###
+if 'SHOW_INFO' not in config.sections(): config.add_section('SHOW_INFO')
+config_show = config["SHOW_INFO"]
+
+if 'hostname' in config_show:
+    SHOW_hostname = str2bool(config_show['hostname'])
+else:
+    SHOW_hostname = True
+    config_show.set['hostname'] = str(SHOW_hostname)
+
+if 'dns_suffix' in config_show:
+    SHOW_dns_suffix = str2bool(config_show['dns_suffix'])
+else:
+    SHOW_dns_suffix = True
+    config_show.set['dns_suffix'] = str(SHOW_dns_suffix)
+
+if 'interfaces' in config_show:
+    SHOW_interfaces = config_show['interfaces']
+else:
+    SHOW_interfaces = '*'
+    config_show.set['interfaces'] = SHOW_interfaces
+
+if 'interface_ip' in config_show:
+    SHOW_interface_ip = str2bool(config_show['interface_ip'])
+else:
+    SHOW_interface_ip = True
+    config_show.set['interface_ip'] = str(SHOW_interface_ip)

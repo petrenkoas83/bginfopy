@@ -41,27 +41,27 @@ class Image:
 
 
 def main():
-    global USE_WALLPAPER_IMAGE
-    # TODO: define USE_WALLPAPER_IMAGE as wallpapers.get_wallpaper_mode()
+    global MAIN_use_wallpaper_image
+    # TODO: define MAIN_use_wallpaper_image as wallpapers.get_wallpaper_mode()
 
     # Create Image objects
     in_img = Image(wallpapers.get_wallpaper())
-    # out_img = Image(USER_CONF_DIR + "/" + in_img.file_name + SUFFIX + in_img.file_ext)
+    # out_img = Image(USER_CONF_DIR + "/" + in_img.file_name + MAIN_suffix + in_img.file_ext)
     # Let's do it the right (and cross-platform) way: joining path instead of concatenation of strings
-    out_img = Image(os.path.join(USER_CONF_DIR, in_img.file_name + SUFFIX + in_img.file_ext))
+    out_img = Image(os.path.join(USER_CONF_DIR, in_img.file_name + MAIN_suffix + in_img.file_ext))
     verboseprint("in_img.file_name: '{0}'".format(in_img.file_name))
     verboseprint("in_img.file_ext: '{0}'".format(in_img.file_ext))
 
     # Check current wallpaper
-    if in_img.file_name.endswith(SUFFIX):
+    if in_img.file_name.endswith(MAIN_suffix):
         # If current wallpaper created with bginfo, then try to get original wallpaper
-        if ORIGINAL_WALLPAPER_IMAGE == '':
+        if MAIN_original_wallpaper_image == '':
             # If original wallpaper is not set in config, then use blank background
-            verboseprint("Can not find original wallpaper: '{0}'".format(ORIGINAL_WALLPAPER_IMAGE))
+            verboseprint("Can not find original wallpaper: '{0}'".format(MAIN_original_wallpaper_image))
             in_img.full_path = ''
         else:
             # If original wallpaper is set in config, then use original wallpaper
-            in_img.full_path = ORIGINAL_WALLPAPER_IMAGE
+            in_img.full_path = MAIN_original_wallpaper_image
 
     # Check file of original wallpaper
     if in_img.file_exist:
@@ -69,7 +69,7 @@ def main():
     else:
         # If file of original wallpaper does not exist, then use blank background
         verboseprint('File {0} does not exist! I will use blank background.'.format(in_img.full_path))
-        USE_WALLPAPER_IMAGE = False
+        MAIN_use_wallpaper_image = False
         in_img.full_path = ''
 
     # Process wallpaper image
@@ -78,12 +78,12 @@ def main():
         # If convert successful, then set new wallpaper
         if wallpapers.set_wallpaper(out_img.full_path) == 0:
             # If set new wallpaper is successful, then renew path to original wallpaper image
-            verboseprint("Previous value of [MAIN][ORIGINAL_WALLPAPER_IMAGE]: '{0}'".format(
-                config['MAIN']['ORIGINAL_WALLPAPER_IMAGE']))
-            config.set('MAIN', 'ORIGINAL_WALLPAPER_IMAGE', in_img.full_path)
+            verboseprint("Previous value of [MAIN][MAIN_original_wallpaper_image]: '{0}'".format(
+                config['MAIN']['original_wallpaper_image']))
+            config.set('MAIN', 'original_wallpaper_image', in_img.full_path)
             # Try to write user config
             verboseprint(
-                "Renew parameter in config [MAIN][ORIGINAL_WALLPAPER_IMAGE] = '{0}'".format(in_img.full_path))
+                "Renew parameter in config [MAIN][original_wallpaper_image] = '{0}'".format(in_img.full_path))
             with open(USER_CONF_DIR + "/" + USER_CONF_FILE, 'w') as config_file:  # save
                 config.write(config_file)
                 config_file.close()
