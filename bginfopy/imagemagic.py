@@ -8,10 +8,10 @@ def put_text(in_img, out_img):
     # http://stackoverflow.com/questions/25079140/python-subprocess-popen-check-for-success-and-errors
     # https://docs.python.org/2/library/subprocess.html#subprocess.check_call
     try:
-        if (out_img == '') or not MAIN_use_wallpaper_image:
-            verboseprint("(out_img == '') or not MAIN_use_wallpaper_image")
+        if (out_img == '') or not str2bool(config['MAIN']['use_wallpaper_image']):
+            verboseprint("(out_img == '') or not config['MAIN']['use_wallpaper_image']")
             output = subprocess.check_output(["convert",
-                                              "-background", BACKGROUND_color,
+                                              "-background", config['BACKGROUND']['color'],
                                               "-fill", "dodgerblue",
                                               # TODO: Try to get system default UI font and use it
                                               "-font", "Candice",
@@ -19,19 +19,19 @@ def put_text(in_img, out_img):
                                               "-stroke", "blue",
                                               "-undercolor", "lightblue",
                                               "-size", wallpapers.determine_screen_resolution(),
-                                              "-gravity", TEXT_gravity,
+                                              "-gravity", config['TEXT']['gravity'],
                                               TEXT_title,
                                               out_img],
                                              stderr=subprocess.STDOUT)
         else:
-            verboseprint("MAIN_use_wallpaper_image")
-            # os.popen("convert {0} -gravity {2} -pointsize 30 -annotate +0+100 'TestText' {1}".format(in_img, out_img, TEXT_gravity))
+            verboseprint("config['MAIN']['use_wallpaper_image']")
+            # os.popen("convert {0} -gravity {2} -pointsize 30 -annotate +0+100 'TestText' {1}".format(in_img, out_img, config['TEXT']['gravity']))
             output = subprocess.check_output(["convert",
                                               in_img,
-                                              "-gravity", TEXT_gravity,
+                                              "-gravity", config['TEXT']['gravity'],
                                               "-pointsize","30",
                                               "-annotate","+0+100",
-                                              TEXT_title,
+                                              config['TEXT']['title'],
                                               out_img],
                                              stderr=subprocess.STDOUT)
 

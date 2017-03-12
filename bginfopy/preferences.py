@@ -5,6 +5,11 @@ from os.path import expanduser
 import configparser
 
 
+def str2bool(string):
+    # type: (str) -> bool
+    return string.lower() in ("yes", "true", "y", "1")
+
+
 # http://stackoverflow.com/questions/5980042/how-to-implement-the-verbose-or-v-option-into-a-script
 def verboseprint(message):
     if VERBOSE:
@@ -41,28 +46,29 @@ verboseprint("User config contains sections: {0}".format(config.sections()))
 if 'MAIN' not in config:
     config.add_section('MAIN')
 config_main = config["MAIN"]
-MAIN_suffix                   = config_main.get('suffix', fallback = '_{0}'.format(APP_NAME))
-MAIN_original_wallpaper_image = config_main.get('original_wallpaper_image', fallback = '')
-MAIN_use_wallpaper_image      = config_main.getboolean('use_wallpaper_image', fallback = True)
+config['MAIN']['suffix']                   = config_main.get('suffix', fallback = '_{0}'.format(APP_NAME))
+config['MAIN']['original_wallpaper_image'] = config_main.get('original_wallpaper_image', fallback = '')
+config['MAIN']['use_wallpaper_image']      = config_main.get('use_wallpaper_image', fallback = 'True')
 
 ### SECTION BACKGROUND ###
 if 'BACKGROUND' not in config:
     config.add_section('BACKGROUND')
 config_background = config["BACKGROUND"]
-BACKGROUND_color = config_background.get('color', fallback = 'teal')
+config['BACKGROUND']['color'] = config_background.get('color', fallback = 'teal')
 
 ### SECTION TEXT ###
 if 'TEXT' not in config.sections():
     config.add_section('TEXT')
 config_text = config["TEXT"]
-TEXT_gravity = config_text.get('gravity', fallback = 'North')
-TEXT_title   = config_text.get('title', fallback = 'Test text')
+config['TEXT']['gravity'] = config_text.get('gravity', fallback = 'North')
+config['TEXT']['title']   = config_text.get('title', fallback = 'Test text')
 
-### SECTION SHOW_INFO ###
-if 'SHOW_INFO' not in config.sections():
-    config.add_section('SHOW_INFO')
-config_show = config["SHOW_INFO"]
-SHOW_hostname     = config_show.getboolean('hostname', fallback = True)
-SHOW_dns_suffix   = config_show.getboolean('dns_suffix', fallback = True)
-SHOW_interfaces   = config_show.get('interfaces', fallback = '*')
-SHOW_interface_ip = config_show.getboolean('interface_ip', fallback = True)
+### SECTION SHOW ###
+if 'SHOW' not in config.sections():
+    config.add_section('SHOW')
+config_show = config["SHOW"]
+config['SHOW']['hostname']     = config_show.get('hostname', fallback = 'True')
+verboseprint("config['SHOW']['hostname'] = {0}".format(config['SHOW']['hostname']))
+config['SHOW']['dns_suffix']   = config_show.get('dns_suffix', fallback = 'True')
+config['SHOW']['interfaces']   = config_show.get('interfaces', fallback = '*')
+config['SHOW']['interface_ip'] = config_show.get('interface_ip', fallback = 'True')

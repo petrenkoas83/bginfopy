@@ -41,27 +41,25 @@ class Image:
 
 
 def main():
-    global MAIN_use_wallpaper_image
-    # TODO: define MAIN_use_wallpaper_image as wallpapers.get_wallpaper_mode()
+    global config
 
     # Create Image objects
     in_img = Image(wallpapers.get_wallpaper())
-    # out_img = Image(USER_CONF_DIR + "/" + in_img.file_name + MAIN_suffix + in_img.file_ext)
     # Let's do it the right (and cross-platform) way: joining path instead of concatenation of strings
-    out_img = Image(os.path.join(USER_CONF_DIR, in_img.file_name + MAIN_suffix + in_img.file_ext))
+    out_img = Image(os.path.join(USER_CONF_DIR, in_img.file_name + config['MAIN']['suffix'] + in_img.file_ext))
     verboseprint("in_img.file_name: '{0}'".format(in_img.file_name))
     verboseprint("in_img.file_ext: '{0}'".format(in_img.file_ext))
 
     # Check current wallpaper
-    if in_img.file_name.endswith(MAIN_suffix):
+    if in_img.file_name.endswith(config['MAIN']['suffix']):
         # If current wallpaper created with bginfo, then try to get original wallpaper
-        if MAIN_original_wallpaper_image == '':
+        if config['MAIN']['original_wallpaper_image'] == '':
             # If original wallpaper is not set in config, then use blank background
-            verboseprint("Can not find original wallpaper: '{0}'".format(MAIN_original_wallpaper_image))
+            verboseprint("Can not find original wallpaper: '{0}'".format(config['MAIN']['original_wallpaper_image']))
             in_img.full_path = ''
         else:
             # If original wallpaper is set in config, then use original wallpaper
-            in_img.full_path = MAIN_original_wallpaper_image
+            in_img.full_path = config['MAIN']['original_wallpaper_image']
 
     # Check file of original wallpaper
     if in_img.file_exist:
@@ -69,7 +67,7 @@ def main():
     else:
         # If file of original wallpaper does not exist, then use blank background
         verboseprint('File {0} does not exist! I will use blank background.'.format(in_img.full_path))
-        MAIN_use_wallpaper_image = False
+        config['MAIN']['use_wallpaper_image'] = 'False'
         in_img.full_path = ''
 
     # Process wallpaper image
