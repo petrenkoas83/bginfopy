@@ -54,23 +54,26 @@ def set_wallpaper(out_img):
     desktop_session = determine_desktop_session()
 
     if desktop_session in ["mate", "mate-session"]:
-        result = set_wallpaper_mate()
+        result = set_wallpaper_mate(out_img)
     elif desktop_session in ["lubuntu", "lxsession"]:
-        result = set_wallpaper_lxde()
+        result = set_wallpaper_lxde(out_img)
     else:
         sys.exit("Unsupported desktop session: '{0}'".format(desktop_session))
 
     return result
 
 
-def set_wallpaper_mate():
-    print('set_wallpaper_mate')
-    return 0
+def set_wallpaper_mate(file):
+    verboseprint("Try to set wallpaper for mate: {0}".format(file))
+    # 'none', 'wallpaper', 'centered', 'scaled', 'stretched', 'zoom', 'spanned'
+    os.popen("gsettings set org.mate.background picture-options stretched").read()
+    return os.popen("gsettings set org.mate.background picture-filename {0}".format(file)).read()
 
 
-def set_wallpaper_lxde():
-    print('set_wallpaper_lxde')
-    return 0
+def set_wallpaper_lxde(file):
+    verboseprint("Try to set wallpaper for lxde: {0}".format(file))
+    # --wallpaper-mode=(color|stretch|fit|crop|center|tile|screen)
+    return os.popen("pcmanfm --set-wallpaper={0} --wallpaper-mode=stretch".format(file)).read()
 
 
 def determine_platform():
