@@ -1,10 +1,19 @@
+import os
 import wallpapers
+import collectingdata
 from preferences import *
-
 
 # http://www.imagemagick.org/Usage/text/\
 def put_text(in_img, out_img):
     verboseprint("Input image: '{0}'; Output image: '{1}'.".format(in_img, out_img))
+
+    label = [config['TEXT']['title']]
+    if str2bool(config['SHOW']['hostname']):
+        label.append("Hostname:{0}".format(os.uname()[1]))
+    if str2bool(config['SHOW']['interface_ip']):
+        label.extend(collectingdata.get_ifipv4())
+    label = "\n".join(label)
+
     # http://stackoverflow.com/questions/25079140/python-subprocess-popen-check-for-success-and-errors
     # https://docs.python.org/2/library/subprocess.html#subprocess.check_call
     try:
@@ -20,7 +29,7 @@ def put_text(in_img, out_img):
                                               "-undercolor", "lightblue",
                                               "-size", wallpapers.determine_screen_resolution(),
                                               "-gravity", config['TEXT']['gravity'],
-                                              TEXT_title,
+                                              label,
                                               out_img],
                                              stderr=subprocess.STDOUT)
         else:
@@ -31,7 +40,7 @@ def put_text(in_img, out_img):
                                               "-gravity", config['TEXT']['gravity'],
                                               "-pointsize","30",
                                               "-annotate","+0+100",
-                                              config['TEXT']['title'],
+                                              label,
                                               out_img],
                                              stderr=subprocess.STDOUT)
 
