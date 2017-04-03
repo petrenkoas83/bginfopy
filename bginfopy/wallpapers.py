@@ -26,7 +26,7 @@ def get_wallpaper():
 
     # If current wallpaper image contains suffix, then we will
     suffix = config['MAIN']['suffix']
-    if (picture.find(suffix) >= 0):
+    if (picture.find(suffix) >= 0) or (picture in ['', None]):
         picture = config['MAIN']['original_wallpaper_image']
         if config['MAIN']['original_wallpaper_image'] == '':
             verboseprint('Can not find info about original wallpaper image.')
