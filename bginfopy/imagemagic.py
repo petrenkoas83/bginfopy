@@ -47,7 +47,7 @@ def put_text(in_img, out_img):
                                               "-fill", "yellow",
                                               #"-undercolor", "yellow",
                                               "-annotate","+0+100",
-                                              "label:{0}`".format(label),
+                                              "{0}".format(label),
                                               out_img],
                                              stderr=subprocess.STDOUT)
 
