@@ -20,18 +20,11 @@ def verboseprint(message):
 
 # Default values
 APP_NAME = 'bginfopy'
+# TODO: https://docs.python.org/2/library/logging.html
 VERBOSE = True
 USER_CONF_DIR = expanduser("~") + '/.' + APP_NAME
 USER_CONF_FILE = APP_NAME + '.ini'
 
-# Ini values
-SUFFIX = '_' + APP_NAME
-USE_WALLPAPER_IMAGE = True
-ORIGINAL_WALLPAPER_IMAGE = ''
-BACKGROUND_COLOR = 'teal'  # white is too much
-# TODO: move TEXT to config file so imagemagic read it from config
-TEXT_LABEL = 'Test text'
-TEXT_GRAVITY = 'North'
 
 # User configuration
 # Try to create user conf dir
@@ -43,51 +36,40 @@ else:
     verboseprint(
         "Directory {0} successfully created or already exist: {1}: {2}".format(USER_CONF_DIR, output,
                                                                                subprocess.STDOUT))
-
 # Try to read user config
+# TODO: use by default main config file /etc/bginfopy. Use user config file only if allowed at main config.
 config = configparser.ConfigParser()
 verboseprint("User config file: {0}".format(USER_CONF_DIR + "/" + USER_CONF_FILE))
 config.read(USER_CONF_DIR + "/" + USER_CONF_FILE)
 verboseprint("User config contains sections: {0}".format(config.sections()))
 
 ### SECTION MAIN ###
-if 'MAIN' not in config: config.add_section('MAIN')
+if 'MAIN' not in config:
+    config.add_section('MAIN')
 config_main = config["MAIN"]
-
-if 'SUFFIX' in config_main:
-    SUFFIX = config['MAIN']['SUFFIX']
-else:
-    config.set('MAIN', 'SUFFIX', SUFFIX)
-
-if 'USE_WALLPAPER_IMAGE' in config_main:
-    USE_WALLPAPER_IMAGE = str2bool(config['MAIN']['USE_WALLPAPER_IMAGE'])
-else:
-    config.set('MAIN', 'USE_WALLPAPER_IMAGE', str(USE_WALLPAPER_IMAGE))
-
-if 'ORIGINAL_WALLPAPER_IMAGE' in config_main:
-    ORIGINAL_WALLPAPER_IMAGE = config['MAIN']['ORIGINAL_WALLPAPER_IMAGE']
-else:
-    config.set('MAIN', 'ORIGINAL_WALLPAPER_IMAGE', ORIGINAL_WALLPAPER_IMAGE)
+config['MAIN']['suffix']                   = config_main.get('suffix', fallback = '_{0}'.format(APP_NAME))
+config['MAIN']['original_wallpaper_image'] = config_main.get('original_wallpaper_image', fallback = '')
+config['MAIN']['use_wallpaper_image']      = config_main.get('use_wallpaper_image', fallback = 'True')
 
 ### SECTION BACKGROUND ###
-if 'BACKGROUND' not in config: config.add_section('BACKGROUND')
+if 'BACKGROUND' not in config:
+    config.add_section('BACKGROUND')
 config_background = config["BACKGROUND"]
-
-if 'COLOR' in config_background:
-    BACKGROUND_COLOR = config_background['COLOR']
-else:
-    config.set('BACKGROUND', 'COLOR', BACKGROUND_COLOR)
+config['BACKGROUND']['color'] = config_background.get('color', fallback = 'teal')
 
 ### SECTION TEXT ###
-if 'TEXT' not in config.sections(): config.add_section('TEXT')
+if 'TEXT' not in config.sections():
+    config.add_section('TEXT')
 config_text = config["TEXT"]
+config['TEXT']['gravity'] = config_text.get('gravity', fallback = 'NorthEast')
+config['TEXT']['title']   = config_text.get('title', fallback = 'Please provide this info to tech support')
 
-if 'GRAVITY' in config_text:
-    TEXT_GRAVITY = config['TEXT']['GRAVITY']
-else:
-    config.set('TEXT', 'GRAVITY', TEXT_GRAVITY)
-
-if 'TEXT_LABEL' in config_text:
-    TEXT_LABEL = config_text['TEXT_LABEL']
-else:
-    config.set('TEXT', 'TEXT_LABEL', TEXT_LABEL)
+### SECTION SHOW ###
+if 'SHOW' not in config.sections():
+    config.add_section('SHOW')
+config_show = config["SHOW"]
+config['SHOW']['hostname']     = config_show.get('hostname', fallback = 'True')
+verboseprint("config['SHOW']['hostname'] = {0}".format(config['SHOW']['hostname']))
+config['SHOW']['dns_suffix']   = config_show.get('dns_suffix', fallback = 'True') # TODO
+config['SHOW']['interfaces']   = config_show.get('interfaces', fallback = '*') # TODO
+config['SHOW']['interface_ip'] = config_show.get('interface_ip', fallback = 'True')
