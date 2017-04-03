@@ -14,5 +14,5 @@ def get_ifipv4():
             if not addr:
                 continue
             if not (interface.startswith('lo') or addr.startswith('127.')):
-                ifipv4.append("Interface {0}: {1}".format(interface, addr))
+                ifipv4.append("{0} ip address: {1}".format(interface, addr))
     return ifipv4

@@ -56,10 +56,11 @@ def main():
         if config['MAIN']['original_wallpaper_image'] == '':
             verboseprint("Can not find original wallpaper: '{0}'".format(config['MAIN']['original_wallpaper_image']))
             in_img.full_path = ''
-            out_img = Image(os.path.join(USER_CONF_DIR, in_img.file_name + config['MAIN']['suffix'] + in_img.file_ext))
         # If original wallpaper is set in config, then use original wallpaper
         else:
             in_img.full_path = config['MAIN']['original_wallpaper_image']
+
+    out_img = Image(os.path.join(USER_CONF_DIR, in_img.file_name + config['MAIN']['suffix'] + in_img.file_ext))
 
     # Check file of original wallpaper
     if in_img.file_exist:
@@ -75,13 +76,16 @@ def main():
     # If convert successful, then set new wallpaper
     if imagemagic.put_text(in_img.full_path, out_img.full_path) == 0:
         # If set new wallpaper is successful, then renew path to original wallpaper image
-        if wallpapers.set_wallpaper(out_img.full_path) == 0:
+        walsetres = wallpapers.set_wallpaper(out_img.full_path)
+        if walsetres in ['', 0]:
             config.set('MAIN', 'original_wallpaper_image', in_img.full_path)
             # Try to write user config
             verboseprint("Renew parameter in config for [MAIN][original_wallpaper_image] = '{0}'".format(in_img.full_path))
             with open(USER_CONF_DIR + "/" + USER_CONF_FILE, 'w') as config_file:  # save
                 config.write(config_file)
                 config_file.close()
+        else:
+            verboseprint("Set_wallpaper is unsuccessful: '{0}'".format(walsetres))
     else:
         print('Error occurred during running put_text function.')
     return 0

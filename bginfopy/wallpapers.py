@@ -25,7 +25,8 @@ def get_wallpaper():
         picture = ''
 
     # If current wallpaper image contains suffix, then we will
-    if picture.find(config['MAIN']['suffix']):
+    suffix = config['MAIN']['suffix']
+    if (picture.find(suffix) >= 0):
         picture = config['MAIN']['original_wallpaper_image']
         if config['MAIN']['original_wallpaper_image'] == '':
             verboseprint('Can not find info about original wallpaper image.')
@@ -34,7 +35,9 @@ def get_wallpaper():
 
 
 def get_wallpaper_mate():
-    return os.popen("gsettings get org.mate.background picture-filename").read()
+    picture = os.popen("gsettings get org.mate.background picture-filename").read()
+    return picture
+
 
 
 def get_lxde_profile_name():
@@ -71,7 +74,6 @@ def set_wallpaper(out_img):
         sys.exit("Unsupported desktop session: '{0}'".format(desktop_session))
 
     return result
-
 
 def set_wallpaper_mate(file):
     verboseprint("Try to set wallpaper for mate: {0}".format(file))

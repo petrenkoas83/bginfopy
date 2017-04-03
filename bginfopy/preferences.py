@@ -61,7 +61,7 @@ config['BACKGROUND']['color'] = config_background.get('color', fallback = 'teal'
 if 'TEXT' not in config.sections():
     config.add_section('TEXT')
 config_text = config["TEXT"]
-config['TEXT']['gravity'] = config_text.get('gravity', fallback = 'North')
+config['TEXT']['gravity'] = config_text.get('gravity', fallback = 'NorthEast')
 config['TEXT']['title']   = config_text.get('title', fallback = 'Please provide this info to tech support')
 
 ### SECTION SHOW ###
