@@ -37,6 +37,7 @@ else:
         "Directory {0} successfully created or already exist: {1}: {2}".format(USER_CONF_DIR, output,
                                                                                subprocess.STDOUT))
 # Try to read user config
+# TODO: use by default main config file /etc/bginfopy. Use user config file only if allowed at main config.
 config = configparser.ConfigParser()
 verboseprint("User config file: {0}".format(USER_CONF_DIR + "/" + USER_CONF_FILE))
 config.read(USER_CONF_DIR + "/" + USER_CONF_FILE)
@@ -61,7 +62,7 @@ if 'TEXT' not in config.sections():
     config.add_section('TEXT')
 config_text = config["TEXT"]
 config['TEXT']['gravity'] = config_text.get('gravity', fallback = 'North')
-config['TEXT']['title']   = config_text.get('title', fallback = 'Test text')
+config['TEXT']['title']   = config_text.get('title', fallback = 'Please provide this info to tech support')
 
 ### SECTION SHOW ###
 if 'SHOW' not in config.sections():
@@ -69,6 +70,6 @@ if 'SHOW' not in config.sections():
 config_show = config["SHOW"]
 config['SHOW']['hostname']     = config_show.get('hostname', fallback = 'True')
 verboseprint("config['SHOW']['hostname'] = {0}".format(config['SHOW']['hostname']))
-config['SHOW']['dns_suffix']   = config_show.get('dns_suffix', fallback = 'True')
-config['SHOW']['interfaces']   = config_show.get('interfaces', fallback = '*')
+config['SHOW']['dns_suffix']   = config_show.get('dns_suffix', fallback = 'True') # TODO
+config['SHOW']['interfaces']   = config_show.get('interfaces', fallback = '*') # TODO
 config['SHOW']['interface_ip'] = config_show.get('interface_ip', fallback = 'True')

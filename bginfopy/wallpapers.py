@@ -19,7 +19,17 @@ def get_wallpaper():
     picture = picture.rstrip('\n\r')
     picture = picture.strip("'")
 
-    verboseprint("Wallpaper: '{0}'".format(picture))
+    # Checking existance of image
+    if not os.path.exists(picture):
+        verboseprint("Current wallpaper image '{0}' not found.".format(picture))
+        picture = ''
+
+    # If current wallpaper image contains suffix, then we will
+    if picture.find(config['MAIN']['suffix']):
+        picture = config['MAIN']['original_wallpaper_image']
+        if config['MAIN']['original_wallpaper_image'] == '':
+            verboseprint('Can not find info about original wallpaper image.')
+            config['MAIN']['use_wallpaper_image'] = 'False'
     return picture
 
 

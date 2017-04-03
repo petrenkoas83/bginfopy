@@ -18,35 +18,39 @@ def put_text(in_img, out_img):
     # https://docs.python.org/2/library/subprocess.html#subprocess.check_call
     try:
         if (out_img == '') or not str2bool(config['MAIN']['use_wallpaper_image']):
-            verboseprint("(out_img == '') or not config['MAIN']['use_wallpaper_image']")
+            verboseprint("Use blank background, because (out_img == '') or not config['MAIN']['use_wallpaper_image']")
             output = subprocess.check_output(["convert",
                                               "-background", config['BACKGROUND']['color'],
                                               "-fill", "dodgerblue",
                                               # TODO: Try to get system default UI font and use it
-                                              "-font", "Candice",
+                                              "-font", "Liberation-Sans",
                                               "-strokewidth", "2",
                                               "-stroke", "blue",
                                               "-undercolor", "lightblue",
                                               "-size", wallpapers.determine_screen_resolution(),
                                               "-gravity", config['TEXT']['gravity'],
-                                              label,
+                                              "label:{0}".format(label),
                                               out_img],
                                              stderr=subprocess.STDOUT)
+            verboseprint("Convert output: '{0}'".format(output))
         else:
             verboseprint("config['MAIN']['use_wallpaper_image']")
             # os.popen("convert {0} -gravity {2} -pointsize 30 -annotate +0+100 'TestText' {1}".format(in_img, out_img, config['TEXT']['gravity']))
             output = subprocess.check_output(["convert",
                                               in_img,
                                               "-gravity", config['TEXT']['gravity'],
-                                              "-pointsize","30",
+                                              "-pointsize","120",
+                                              "-strokewidth", "2",
+                                              "-stroke", "black",
+                                              "-undercolor", "yellow",
                                               "-annotate","+0+100",
-                                              label,
+                                              "label:{0}".format(label),
                                               out_img],
                                              stderr=subprocess.STDOUT)
 
     except subprocess.CalledProcessError as error:
         # self.isCommandExecutionSuccessful = False
-        print("Error: '{0}': '{1}': '{2}'".format(error.returncode, error.output, error.message))
+        print("Converting error:\n Code: '{0}'\n Output: '{1}'\n Message: '{2}'\n Command: '{3}'".format(error.returncode, error.output, error.message, error.cmd))
         return error.returncode
 
     return 0
