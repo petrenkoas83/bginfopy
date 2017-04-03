@@ -60,7 +60,10 @@ def main():
         else:
             in_img.full_path = config['MAIN']['original_wallpaper_image']
 
-    out_img = Image(os.path.join(USER_CONF_DIR, in_img.file_name + config['MAIN']['suffix'] + in_img.file_ext))
+    if in_img.file_ext in ["", None]:
+        out_img = Image(os.path.join(USER_CONF_DIR, in_img.file_name + config['MAIN']['suffix'] + ".png"))
+    else:
+        out_img = Image(os.path.join(USER_CONF_DIR, in_img.file_name + config['MAIN']['suffix'] + in_img.file_ext))
 
     # Check file of original wallpaper
     if in_img.file_exist:
