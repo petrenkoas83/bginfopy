@@ -11,7 +11,7 @@ def get_wallpaper():
 
     if desktop_session in ["mate", "mate-session"]:
         picture = get_wallpaper_mate()
-    elif desktop_session in ["lubuntu", "lxsession"]:
+    elif desktop_session in ["lubuntu", "lxsession", "lxde"]:
         picture = get_wallpaper_lxde()
     else:
         sys.exit("Unknown desktop session: '{0}'".format(desktop_session))
@@ -41,24 +41,29 @@ def get_wallpaper_mate():
 
 
 def get_lxde_profile_name():
-    return os.popen(
-        "grep -i \"^@pcmanfm\" /etc/xdg/lxsession/Lubuntu/autostart | grep -oP \"\\-\\-profile[\\s=].*[\\s\\n\\r]*\""
-    ).read()
-
+    files = ["/etc/xdg/lxsession/Lubuntu/autostart", "/etc/xdg/lxsession/LXDE/autostart"]
+    for file in files:
+        if os.path.exists(file):
+            #result = os.popen("grep -i \"^@pcmanfm\" {0} | grep -oP \"\\-\\-profile[\\s=].*[\\s\\n\\r]*\"".format(file)).read()
+            result = os.popen("grep -i \"^@pcmanfm\" {0} | grep -oP \"\\-\\-profile[\\s=].*[\\s\\n\\r]*\" | cut \\-d\' \' \\-f2".format(file)).read()
+    return result.rstrip('\n\r')
+    
 
 def get_wallpaper_lxde():
+    wallpaper = ''
     profile_name = get_lxde_profile_name()
     parser = configparser.ConfigParser()
-
     verboseprint("Profile name: '{0}'".format(profile_name))
-
     if (profile_name is not None) and (profile_name <> ''):
         config_path = os.path.join(os.path.expandvars('$HOME'), '.config/pcmanfm', profile_name, 'desktop-items-0.conf')
     else:
         config_path = os.path.join(os.path.expandvars('$HOME'), '.config/pcmanfm/lubuntu/desktop-items-0.conf')
-
-    parser.read(config_path)
-    return parser['*']['wallpaper']
+    verboseprint("Config path: '{0}'".format(config_path))
+    config.read(config_path)
+    if '*' in config:
+        config_star = config['*']
+        wallpaper = config_star.get('wallpaper', fallback = '')
+    return wallpaper
 
 
 def set_wallpaper(out_img):
@@ -68,7 +73,7 @@ def set_wallpaper(out_img):
 
     if desktop_session in ["mate", "mate-session"]:
         result = set_wallpaper_mate(out_img)
-    elif desktop_session in ["lubuntu", "lxsession"]:
+    elif desktop_session in ["lubuntu", "lxsession", "lxde"]:
         result = set_wallpaper_lxde(out_img)
     else:
         sys.exit("Unsupported desktop session: '{0}'".format(desktop_session))
