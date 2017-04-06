@@ -25,10 +25,10 @@ def put_text(in_img, out_img):
                                               "-pointsize", "24",
                                               "-splice", "24x24",
                                               # TODO: Try to get system default UI font and use it
-                                              "-font", "Liberation-Sans-Bold", # convert -list font
-                                              "-strokewidth", "1",
-                                              "-stroke", "black",
-                                              "-fill", "yellow",
+                                              "-font", "Liberation-Sans", # convert -list font
+                                              #"-strokewidth", "1",
+                                              #"-stroke", "black",
+                                              "-fill", "white",
                                               #"-undercolor", "white",
                                               "-gravity", config['TEXT']['gravity'],
                                               "label:{0}".format(label),
