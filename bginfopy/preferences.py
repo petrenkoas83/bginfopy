@@ -49,7 +49,7 @@ if 'MAIN' not in config:
 config_main = config["MAIN"]
 config['MAIN']['suffix']                   = config_main.get('suffix', fallback = '_{0}'.format(APP_NAME))
 config['MAIN']['original_wallpaper_image'] = config_main.get('original_wallpaper_image', fallback = '')
-config['MAIN']['use_wallpaper_image']      = config_main.get('use_wallpaper_image', fallback = 'True')
+config['MAIN']['use_wallpaper_image']      = config_main.get('use_wallpaper_image', fallback = 'False')
 
 ### SECTION BACKGROUND ###
 if 'BACKGROUND' not in config:
