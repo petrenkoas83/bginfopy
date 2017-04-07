@@ -14,4 +14,6 @@ Use stdeb to create deb-package
 
 https://pypi.python.org/pypi/stdeb
 
-python setup.py --command-packages=stdeb.command bdist_deb
+Just run next command to build deb-package:
+
+python setup.py --command-packages=stdeb.command sdist_dsc --depends imagemagick bdist_deb
