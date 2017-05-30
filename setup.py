@@ -12,7 +12,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='bginfopy',
-    version='0.2.5',
+    version='0.3.0',
 
     description='BgInfo Python',
     long_description=long_description,
